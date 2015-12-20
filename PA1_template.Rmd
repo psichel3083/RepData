@@ -5,7 +5,7 @@ date: "December 16, 2015"
 output: html_document
 ---
 
-Access the zip file from the course website, unzip as .csv file
+##Access the zip file from the course website, unzip as .csv file##
 ```{r, echo=TRUE}
 temp <- tempfile()
 download.file("http://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip", 
@@ -15,44 +15,41 @@ activity <- read.csv(temp)
 unlink(temp)
 ```
 
-Create a historgram of the activity dataset
+##Create a historgram of the activity dataset##
 ```{r, echo=TRUE}
 activity$date <- as.Date(activity$date)
 days <- aggregate(steps ~ date, data=activity, FUN="sum")
 hist(days$steps)
 ```
 
-Calculate the median and mean 
+###Calculate the median and mean ###
 ```{r, echo=TRUE}
-median(activity$steps, na.rm=TRUE)
+median(days$steps, na.rm=TRUE)
 
-# mean calc goes here - TBD!!!
-
+mean(days$steps, na.rm=TRUE)
 ```
 
-Look at the average daily activity patterm
+##Look at the average daily activity pattern##
 ```{r, echo=TRUE}
 pattern <- aggregate(steps ~ interval, data=activity, FUN="sum")
 plot(pattern$interval, pattern$steps, type="l")
 ```
-
-Question: which 5-min interval (snip) contains the max number of steps?
+  
+###Question: Which 5-min interval contains the max number of steps?###
 ```{r, echo=TRUE}
-
-## this is the value when the MAX occurs, need the MAX interval -- TBD!!
+## this is the value of max steps
 max(pattern$steps, na.rm=TRUE)
 ```
-
-Calculate the total number of missing values
-```{r, echo=FALSE}
-missing_count <- nrow(subset(activity, is.na(steps)))
-print ("this is the number of missing values:")
-print(missing_count)
-print ("this is this missing percent of the total number of values:")
-print(missing_count/17568*100)
-
-
-# Inputting missing values -- fill N/A with mean value
+Using View(pattern), when the number of steps = 10927,
+the interval is **835**.  This corresponds to 8:35am (I think)  
+  
+##Calculate the total number of missing values##
+```{r, echo=TRUE}
+nrow(subset(activity, is.na(steps)))
+```
+  
+##Inputting missing values -- fill all N/As with the mean value##
+```{r, echo=TRUE}
 #steps <- c()
 #for (i in 1:nrow(activity)) {
 #  if (is.na(activity$steps[i])) {
@@ -67,7 +64,14 @@ print(missing_count/17568*100)
 #filled_data <- activity.frame(steps, date, interval)
 #head(filled_data)
 
-
 ```
+##Another histogram ...##
+
+##Re-calculate the mean and median...##
+
+##Question: Are there differences weekday vs. weekend activity patterns?##
+
+
+
 
 
