@@ -48,26 +48,32 @@ the interval is **835**.  This corresponds to 8:35am (I think)
 nrow(subset(activity, is.na(steps)))
 ```
   
-##Inputting missing values -- fill all N/As with the mean value##
+##Input missing values -- fill all N/As with zero##
 ```{r, echo=TRUE}
-#steps <- c()
-#for (i in 1:nrow(activity)) {
-#  if (is.na(activity$steps[i])) {
-#    index <- which(pattern$interval == activity$interval[i])
-#    steps[i] <- pattern$steps[index]
-#  } else {
-#    steps[i] <- activity$steps[i]
-#  }
-#}
-#date <- activity$date
-#interval <- activity$interval
-#filled_data <- activity.frame(steps, date, interval)
-#head(filled_data)
-
+steps <- c()
+for (i in 1:nrow(activity)) {
+  if (is.na(activity$steps[i])) {
+    steps[i] = 0
+  } else {
+    steps[i] <- activity$steps[i]
+  }
+}
+date <- activity$date
+interval <- activity$interval
+fullset <- data.frame(steps, date, interval)
 ```
-##Another histogram ...##
+##Here is the Histogram for the new data set (no N/As)##
+```{r, echo=TRUE}
+fulldays <- aggregate(steps ~ date, data=fullset, FUN="sum")
+hist(fulldays$steps)
+```
 
-##Re-calculate the mean and median...##
+##Re-calculate the median and mean of the new data set##
+```{r, echo=TRUE}
+median(fulldays$steps, na.rm=TRUE)
+
+mean(fulldays$steps, na.rm=TRUE)
+```
 
 ##Question: Are there differences weekday vs. weekend activity patterns?##
 
